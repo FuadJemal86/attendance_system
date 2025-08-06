@@ -38,7 +38,7 @@ class AddCategory(serializers.ModelSerializer):
 
 
 
-# add employee 
+# add employee and send email with QR code
 class AddEmployee(serializers.ModelSerializer):
     class Meta:
         model = Employee
