@@ -1,20 +1,44 @@
 from rest_framework import serializers
-from .models import Category , Employee
+from .models import Category , Employee , Admin
 import qrcode
 from io import BytesIO
 from django.core.files import File
 from django.utils import timezone
 from django.core.mail import EmailMessage
+from django.contrib.auth.hashers import make_password
 
 
+# add admin
+
+class AddAdmin(serializers.ModelSerializer):
+    class Meta:
+        model = Admin
+        fields = ['id', 'name' , 'email' , 'password' , 'image']
+        extra_kwargs = {
+        'password': {'write_only': True}
+        }
+        
+    def validate_password(self, value):
+        if len(value) < 6:
+            raise serializers.ValidationError("Password must be at least 6 characters.")
+        return value
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data['password'])
+        return super().create(validated_data)
+  
+        
+        
 # add category
 class AddCategory(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ['id', 'name']
-        
- 
 
+
+
+
+# add employee 
 class AddEmployee(serializers.ModelSerializer):
     class Meta:
         model = Employee
