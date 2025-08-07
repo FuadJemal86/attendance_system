@@ -36,9 +36,10 @@ class Employee(models.Model):
         return f"{self.full_name} - {self.attendance_id}"
 
 
-class Attendance(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name="attendances")
-    timestamp = models.DateTimeField(default=timezone.now)  # One field is enough for attendance log
+class AttendanceLog(models.Model):
+    employee = models.ForeignKey('Employee', on_delete=models.CASCADE)
+    scanned_at = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=10, default='Present') 
 
     def __str__(self):
-        return f"{self.employee.full_name} @ {self.timestamp.strftime('%Y-%m-%d %H:%M')}"
+        return f"{self.employee.full_name} - {self.scanned_at}"

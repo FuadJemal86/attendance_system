@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category , Employee , Admin
+from .models import Category , Employee , Admin , AttendanceLog
 import qrcode
 from io import BytesIO
 from django.core.files import File
@@ -102,4 +102,34 @@ class AddEmployee(serializers.ModelSerializer):
             sent = email.send()
             print("Email sent status:", sent)
         except Exception as e:
-            print("Email sending failed:", e)       
+            print("Email sending failed:", e)
+
+
+# INPUT Serializer
+class AttendanceScanSerializer(serializers.Serializer):
+    attendance_id = serializers.CharField()
+
+    def create(self, validated_data):
+        attendance_id = validated_data['attendance_id']
+        try:
+            employee = Employee.objects.get(attendance_id=attendance_id)
+        except Employee.DoesNotExist:
+            raise serializers.ValidationError("Invalid QR code / Employee not found.")
+
+        # Prevent duplicate attendance per day
+        today = timezone.now().date()
+        if AttendanceLog.objects.filter(employee=employee, scanned_at__date=today).exists():
+
+            raise serializers.ValidationError("Attendance already logged for today.")
+
+        return AttendanceLog.objects.create(employee=employee)
+    
+    
+    
+# OUTPUT Serializer
+class AttendanceLogSerializer(serializers.ModelSerializer):
+    employee_name = serializers.CharField(source='employee.full_name')
+
+    class Meta:
+        model = AttendanceLog
+        fields = ['id', 'employee_name', 'scanned_at']
