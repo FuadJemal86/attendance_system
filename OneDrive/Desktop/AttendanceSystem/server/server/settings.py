@@ -57,9 +57,7 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",   # React dev server
-    "http://localhost:5173",   # Vite dev server
-    "https://yourfrontend.com" # Production frontend
+    "http://localhost:5173",
 ]
 
 ROOT_URLCONF = 'server.urls'
