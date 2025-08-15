@@ -84,32 +84,7 @@ const QRScanner: React.FC = () => {
     }
   };
 
-  // Handle successful scan
-  // const handleScanSuccess = (data: string) => {
-  //   const result = { data, timestamp: new Date() };
 
-  //   setScanResult(result);
-  //   setStatus('processing');
-  //   setScanHistory(prev => [result, ...prev.slice(0, 4)]);
-
-  //   // Vibrate on success if available
-  //   if ('vibrate' in navigator) {
-  //     navigator.vibrate(100);
-  //   }
-
-  //   // Process result (replace with your API call)
-  //   setTimeout(() => {
-  //     setStatus('success');
-
-  //     // Resume scanning after delay
-  //     setTimeout(() => {
-  //       if (videoRef.current && status !== 'idle') {
-  //         setStatus('scanning');
-  //         startScanning();
-  //       }
-  //     }, 2000);
-  //   }, 1000);
-  // };
 
   // Handle scan errors
   const handleScanError = (err: Error) => {
@@ -277,6 +252,7 @@ const QRScanner: React.FC = () => {
         }
         
         .camera-preview {
+          width:100%
           position: relative;
           flex-grow: 1;
           overflow: hidden;
@@ -286,6 +262,9 @@ const QRScanner: React.FC = () => {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          display: flex;
+          justify-content: center;
+          
         }
         
         .camera-feed.processing {
@@ -300,7 +279,7 @@ const QRScanner: React.FC = () => {
           bottom: 0;
           display: flex;
           flex-direction: column;
-          align-items: center;
+          align-items: left;
           justify-content: center;
           background: rgba(0, 0, 0, 0.4);
         }
@@ -324,6 +303,8 @@ const QRScanner: React.FC = () => {
           border: 4px solid #3b82f6;
           border-radius: 16px;
           animation: pulse 2s infinite;
+          display: flex;
+          
         }
         
         .scan-animation {
